@@ -1,6 +1,7 @@
 package pl.todo.site.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,31 +19,34 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotBlank
-    @Pattern(regexp="[A-Za-z]")
+    @Pattern(regexp = "[A-Za-z]")
     private String name;
 
     @NotBlank
-    @Pattern(regexp="[_a-zA-Z0-9-]+(\\\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\\\.[a-zA-Z0-9-]+)*\\\\.([a-zA-Z]{2,})")
+    @Pattern(regexp = "[_a-zA-Z0-9-]+(\\\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\\\.[a-zA-Z0-9-]+)*\\\\.([a-zA-Z]{2,})")
     private String email;
 
     @NotBlank
-    @Pattern(regexp="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@$!%*?&])[A-Za-z\\\\d@$!%*?&]{8,32}$") //duza litera mala litera znak specjalny cyfra 8-32 znaki
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@$!%*?&])[A-Za-z\\\\d@$!%*?&]{8,32}$")
+    //duza litera mala litera znak specjalny cyfra 8-32 znaki
     private String password;
 
-    @ManyToMany
-    @JoinTable
+    @JsonIgnore
+    @Column
+    @OneToMany(mappedBy = "user")
     private List<Task> taskList = new ArrayList<>();
 
     public User(String name,
                 String email,
-                String password) {
+                String password,
+                List<Task> taskList) {
         this.name = name;
         this.email = email;
         this.password = password;
-
+        this.taskList = taskList;
     }
 }

@@ -1,6 +1,7 @@
 package pl.todo.site.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,17 +18,18 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="task")
+@Table(name = "task")
 public class Task {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotBlank
-    @Size(max=255)
+    @Size(max = 255)
     private String description;
 
+    @JsonIgnore
     @NotNull
     @ManyToOne
     private User user;
@@ -41,11 +43,11 @@ public class Task {
     private Date dueDate;
 
     public Task(String description,
-                User user,
+                User userId,
                 boolean isImportant,
                 Date dueDate) {
         this.description = description;
-        this.user = user;
+        this.user = userId;
         this.isImportant = isImportant;
         this.dueDate = dueDate;
     }
